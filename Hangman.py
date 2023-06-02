@@ -3,7 +3,6 @@ import os
 
 def clear_screen():
     os.system('cls')
-    print("Bildschirm geleert")
 
 def main_menu():
     print("(1) Neues Spiel starten")
@@ -12,7 +11,7 @@ def main_menu():
     print("(4) Beenden")
     user_choice = input()
     if user_choice == "1":
-        new_game()
+        return new_game()
     elif user_choice == "2":
         see_stats()
     elif user_choice == "3":
@@ -30,7 +29,7 @@ def new_game():
         lines = wordlist.read().splitlines()
         random_word = random.choice(lines)
     game_string = len(random_word) * "_"
-    number_lifes = 5
+    number_lifes = 8
     while( (random_word != game_string) & (number_lifes > 0) ):
         clear_screen()
         print("Noch %d Leben übrig" % number_lifes)
@@ -43,13 +42,13 @@ def new_game():
         print("Noch %d Leben übrig" % number_lifes)
         print(game_string)
         print("Du hast das Spiel gewonnen.")
-        return 1
+        return 0, random_word
     else:
         clear_screen()
         print("Noch %d Leben übrig" % number_lifes)
         print(random_word)
         print("Du hast das Spiel verloren")
-        return 0
+        return 1, random_word
 
 
 
@@ -88,7 +87,17 @@ def letter_input(random_word, game_string, number_lifes):
     else:
         number_lifes -= 1
         return [game_string, number_lifes]
-    
+
+# arguments are string: random_word and integer: 0 for won, 1 for lost
+def print_to_stats_txt(random_word, won_or_lost):
+    with open("stats.txt") as f:
+        x = f.read().split("\n")
+    string = x[won_or_lost]
+    string += " " + random_word
+    x[won_or_lost] = string
+    with open("stats.txt", "w") as f:
+        for line in x:
+            f.write(line + "\n")    
     
 def see_stats():
     return 0
@@ -100,7 +109,9 @@ def end_game():
     return 0
 
 clear_screen()  
-main_menu()
+x = main_menu()
+print_to_stats_txt(x[1], x[0])
+
 
 # game(x[0], x[1], x[2])
 
