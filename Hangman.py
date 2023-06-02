@@ -12,7 +12,7 @@ def main_menu():
     print("(4) Beenden")
     user_choice = input()
     if user_choice == "1":
-        return new_game()
+        new_game()
     elif user_choice == "2":
         see_stats()
     elif user_choice == "3":
@@ -31,7 +31,25 @@ def new_game():
         random_word = random.choice(lines)
     game_string = len(random_word) * "_"
     number_lifes = 5
-    return game(random_word, game_string, number_lifes)
+    while( (random_word != game_string) & (number_lifes > 0) ):
+        clear_screen()
+        print("Noch %d Leben übrig" % number_lifes)
+        print(game_string)
+        returns = letter_input(random_word, game_string, number_lifes)
+        game_string = returns[0]
+        number_lifes = returns[1]        
+    if number_lifes > 0:
+        clear_screen()
+        print("Noch %d Leben übrig" % number_lifes)
+        print(game_string)
+        print("Du hast das Spiel gewonnen.")
+        return 1
+    else:
+        clear_screen()
+        print("Noch %d Leben übrig" % number_lifes)
+        print(random_word)
+        print("Du hast das Spiel verloren")
+        return 0
 
 
 
@@ -66,9 +84,10 @@ def letter_input(random_word, game_string, number_lifes):
             word += i
         correct_letters += 1
     if correct_letters > 0:
-        pass
+        return [game_string, number_lifes]
     else:
         number_lifes -= 1
+        return [game_string, number_lifes]
     
     
 def see_stats():
@@ -81,8 +100,8 @@ def end_game():
     return 0
 
 clear_screen()  
-x = main_menu()
-print(x)
+main_menu()
+
 # game(x[0], x[1], x[2])
 
 
