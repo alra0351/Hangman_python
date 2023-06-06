@@ -113,7 +113,8 @@ x = main_menu()
 print_to_stats_txt(x[1], x[0])
 
 
-# game(x[0], x[1], x[2])
+
+
 
 
     
